@@ -5,8 +5,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\MusicLibrary */
 
-$this->title = 'Create Music Library';
-$this->params['breadcrumbs'][] = ['label' => 'Music Libraries', 'url' => ['index']];
+$this->title = Yii::t('app', 'Create Music Library');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Music Libraries'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="music-library-create">

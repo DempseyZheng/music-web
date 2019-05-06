@@ -111,11 +111,12 @@ CREATE TABLE `music_arrange_device`
 CREATE TABLE `music_arrange_item`
 (
   `id`        INT(11)     NOT NULL AUTO_INCREMENT,
-  `arrangeNo` VARCHAR(20) NOT NULL UNIQUE,
+  `arrangeNo` VARCHAR(20) NOT NULL ,
   `musicNo`   VARCHAR(20) NOT NULL,
-
-  PRIMARY KEY (`id`)
-#   FOREIGN KEY (musicNo) REFERENCES music_library (musicNo)  on update cascade on delete cascade
+  CONSTRAINT uk_music_arrange_item UNIQUE (musicNo, arrangeNo),
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (musicNo) REFERENCES music_library (musicNo)  on update cascade on delete cascade,
+  FOREIGN KEY (arrangeNo) REFERENCES music_arrange (arrangeNo)  on update cascade on delete cascade
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8;
 

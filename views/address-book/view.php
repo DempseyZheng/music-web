@@ -4,14 +4,14 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\MusicArrange */
+/* @var $model app\models\Address */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Music Arranges', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Addresses', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
-<div class="music-arrange-view">
+<div class="address-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -25,34 +25,26 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]) ?>
     </p>
-
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'id',
-            'arrangeNo',
-            'arrangeName',
-            'customerName',
-            'beginDate',
-            'endDate',
-            'beginTime',
-            'endTime',
-            'arrangeLevel',
-            'createTime',
-            'updateTime',
+            'first_name',
+            'last_name',
         ],
     ]) ?>
-
     <hr style="height:1px;border:none;border-top:1px dashed #000;" />
-    <h4>音乐列表</h4>
-    <?php foreach ($items as $i => $modelAddress): ?>
-        <?= DetailView::widget([
-            'model' => $modelAddress,
-            'attributes' => [
-                'id',
-                'musicNo',
-            ],
-        ]) ?>
+    <h4>地址</h4>
+    <?php foreach ($addresses as $i => $modelAddress): ?>
+    <?= DetailView::widget([
+        'model' => $modelAddress,
+        'attributes' => [
+            'id',
+            'city',
+            'state',
+            'customer_id',
+        ],
+    ]) ?>
     <?php endforeach; ?>
 
 </div>

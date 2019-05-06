@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use app\utils\NoBuilder;
+use app\utils\RedisHelper;
 use app\utils\Utils;
 use Yii;
 
@@ -19,6 +21,9 @@ use Yii;
  * @property int $arrangeLevel
  * @property string $createTime
  * @property string $updateTime
+ *
+ * @property MusicArrangeItem[] $musicArrangeItems
+ * @property MusicLibrary[] $musicNos
  */
 class MusicArrange extends \yii\db\ActiveRecord
 {
@@ -66,16 +71,39 @@ class MusicArrange extends \yii\db\ActiveRecord
             'updateTime' => '修改时间',
         ];
     }
+
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
             if ($this->isNewRecord) {
 
-                $this->createTime= Utils::defaultDate();
+                $this->createTime = Utils::defaultDate();
+                $dbDate = substr($this->arrangeNo, 2, 8);
+                $dbNo = (int)substr($this->arrangeNo, 10);
+                RedisHelper::getRedis()->set(NoBuilder::ARRANGE_KEY, $dbNo);
+                RedisHelper::getRedis()->set(NoBuilder::ARRANGE_DATE_KEY, $dbDate);
+            }else{
+                $this->updateTime = Utils::defaultDate();
             }
             return true;
         }
         return false;
 
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMusicArrangeItems()
+    {
+        return $this->hasMany(MusicArrangeItem::className(), ['arrangeNo' => 'arrangeNo']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMusicNos()
+    {
+        return $this->hasMany(MusicLibrary::className(), ['musicNo' => 'musicNo'])->viaTable('music_arrange_item', ['arrangeNo' => 'arrangeNo']);
     }
 }

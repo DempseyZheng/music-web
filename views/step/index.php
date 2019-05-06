@@ -43,11 +43,7 @@ $this->title = '分步式用户注册表单UI界面设计';
         <h2 class="fs-title">填写社交账号</h2>
         <section>
             <h3 class="fs-subtitle">填写你的常用社交网络账号</h3>
-            <input type="text" name="x-weibo" placeholder="新浪微博"/>
-            <input type="text" name="t-weibo" placeholder="腾讯微博"/>
-            <input type="text" name="qq" placeholder="腾讯QQ"/>
-            <input type="button" name="previous" class="previous action-button" value="Previous"/>
-            <input type="button" name="next" class="next action-button" value="Next"/>
+
         </section>
 
         <h2 class="fs-title">个人详细信息</h2>

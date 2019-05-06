@@ -30,10 +30,11 @@
                 'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
                 'items' => [
                     ['label' => '菜单', 'options' => ['class' => 'header']],
-                    ['label' => '播期列表', 'icon' => 'file-code-o', 'url' => ['/music-arrange/index']],
-                    ['label' => '音乐库', 'icon' => 'file-code-o', 'url' => ['/music-library/index']],
-                    ['label' => '注册', 'icon' => 'dashboard', 'url' => ['/step/index']],
-                    ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
+                    ['label' => '播期列表', 'icon' => 'circle-o', 'url' => ['/music-arrange/index']],
+                    ['label' => '音乐库', 'icon' => 'circle-o', 'url' => ['/music-library/index']],
+                    ['label' => '注册', 'icon' => 'circle-o', 'url' => ['/step/index']],
+                    ['label' => '地址簿', 'icon' => 'circle-o', 'url' => ['/address-book/index']],
+//                    ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
                     [
                         'label' => 'Some tools',
                         'icon' => 'share',

@@ -17,8 +17,15 @@ $config = [
             'cookieValidationKey' => 'helloWorld',
         ],
         'cache' => [
-            'class' => 'yii\caching\FileCache',
+            // 'class' => 'yii\caching\FileCache',
+            'class' => 'yii\redis\Cache',
+            'redis' => [
+                'hostname' => 'localhost',
+                'port' => 6379,
+                'database' => 1,
+            ],
         ],
+
         'user' => [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
@@ -51,6 +58,19 @@ $config = [
             ],
         ],
 
+        'i18n' => [
+            'translations' => [
+                'app*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@app/messages',
+                    'sourceLanguage' => 'en-US',
+                    'fileMap' => [
+                        'app' => 'app.php',
+                        'app/error' => 'error.php',
+                    ],
+                ],
+            ],
+        ],
     ],
     'params' => $params,
     'language'=>'zh-CN',
@@ -71,6 +91,15 @@ if (YII_ENV_DEV) {
         'class' => 'yii\gii\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
         'allowedIPs' => ['127.0.0.1', '::1','192.168.1.188'],
+//        'generators' => [
+//            'crud' => [ //生成器名称
+//                'class' => 'yii\gii\generators\crud\Generator',
+//                'templates' => [ //设置我们自己的模板
+//                    //模板名 => 模板路径
+//                    'myCrud' => '@app/components/gii/crud/default',
+//                ]
+//            ]
+//        ],
     ];
 }
 return $config;

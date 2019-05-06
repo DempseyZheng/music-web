@@ -54,13 +54,6 @@ class Utils
     }
 
 
-    public static function addZero($num, $len)
-    {
-        while (strlen($num) < $len) {
-            $num = '0' . $num;
-        }
-        return $num;
-    }
 
 
     public static function micTime()

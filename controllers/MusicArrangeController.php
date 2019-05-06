@@ -2,7 +2,12 @@
 
 namespace app\controllers;
 
+use app\models\Address;
+use app\models\MusicArrangeItem;
 use app\utils\DBHelper;
+use app\utils\Debugger;
+use app\utils\NoBuilder;
+use app\utils\RedisHelper;
 use app\utils\RequestHelper;
 use Yii;
 use app\models\MusicArrange;
@@ -15,6 +20,17 @@ use yii\filters\VerbFilter;
 
 /**
  * MusicArrangeController implements the CRUD actions for MusicArrange model.
+ *     <?=$form->field($model, "[{$i}]musicName")->textInput(['maxlength' => true]) ?>
+ *
+ * <?= $form->field($model, "[{$i}]musicSize")->textInput() ?>
+ *
+ * <?= $form->field($model, "[{$i}]musicUrl")->textInput(['maxlength' => true]) ?>
+ *
+ * <?= $form->field($model, "[{$i}]playTime")->textInput() ?>
+ *
+ * <?= $form->field($model, "[{$i}]md5")->textInput(['maxlength' => true]) ?>
+ *
+ * <?= $form->field($model, "[{$i}]createTime")->textInput() ?>
  */
 class MusicArrangeController extends BaseController
 {
@@ -30,7 +46,7 @@ class MusicArrangeController extends BaseController
                     'delete' => ['POST'],
                 ],
             ],
-            'access'=>$this->access
+            'access' => $this->access
         ];
     }
 
@@ -57,8 +73,12 @@ class MusicArrangeController extends BaseController
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $items = $model->musicArrangeItems;
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'items' => $items,
         ]);
     }
 
@@ -69,15 +89,36 @@ class MusicArrangeController extends BaseController
      */
     public function actionCreate()
     {
-        $model = new MusicArrange();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $arr = $this->multipleCreate(new MusicArrange(), [new MusicArrangeItem()], MusicArrangeItem::className(), __NAMESPACE__ . '\MusicArrangeController::createCall');
+        if (!is_array($arr)) {
+            return $arr;
         }
 
+//        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+//            $dbDate = substr($model->arrangeNo, 2, 8);
+//            $dbNo = (int)substr($model->arrangeNo, 10);
+//            RedisHelper::getRedis()->set(NoBuilder::ARRANGE_KEY, $dbNo);
+//            RedisHelper::getRedis()->set(NoBuilder::ARRANGE_DATE_KEY, $dbDate);
+//            return $this->redirect(['view', 'id' => $model->id]);
+//        }
+        $arr[0]->arrangeNo = NoBuilder::getArrangeNo();
         return $this->render('create', [
-            'model' => $model,
+            'model' => $arr[0],
+            'items' => $arr[1],
         ]);
+    }
+
+    public static function updateCall($condition)
+    {
+        MusicArrangeItem::deleteAll($condition);
+    }
+
+    public static function createCall($modelArrange, $modelItem)
+    {
+        Debugger::debug('ssss');
+        $modelItem->arrangeNo = $modelArrange->arrangeNo;
+        return $modelItem;
     }
 
     /**
@@ -90,13 +131,13 @@ class MusicArrangeController extends BaseController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $arr = $this->multipleUpdate($model, $model->musicArrangeItems, MusicArrangeItem::className(), __NAMESPACE__ . '\MusicArrangeController::updateCall');
+        if (!is_array($arr)) {
+            return $arr;
         }
-
         return $this->render('update', [
-            'model' => $model,
+            'model' => $arr[0],
+            'items' => $arr[1],
         ]);
     }
 
