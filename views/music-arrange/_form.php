@@ -77,7 +77,7 @@ BootstrapTableAsset::register($this);
 <?php echo $this->render('@app/views/cmpt/querymodal'); ?>
 <div class="music-arrange-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
 
     <!--   $form->field($model, 'arrangeNo')->widget(\app\widgets\SearchInput::className(), [-->
     <!--        'searchType' => 1-->
