@@ -18,7 +18,6 @@ class DynamicSearchInput extends InputWidget
     public $template = "{input}{button}";
     public $containerOptions = [];
     public $searchType;
-    public $callback;
 
     public function init()
     {
@@ -34,7 +33,7 @@ class DynamicSearchInput extends InputWidget
             ? Html::activeTextInput($this->model, $this->attribute, $this->options)
             : Html::textInput($this->name, $this->value, $this->options);
 
-        $pickerAddon = Html::tag('span', '<span  class="glyphicon glyphicon-search" ></span>', ['class' => 'input-group-addon', 'style' => 'cursor:pointer','onclick'=>'onSearch(this)']);
+        $pickerAddon = Html::tag('span', '<span  class="glyphicon glyphicon-search" ></span>', ['class' => 'input-group-addon', 'style' => 'cursor:pointer','onclick'=>'onSearch(this,'.$this->searchType.')']);
         $input = Html::tag(
             'div',
             strtr($this->template, ['{input}' => $input, '{button}' => $pickerAddon]),

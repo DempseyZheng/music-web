@@ -166,36 +166,8 @@ class MusicArrangeController extends BaseController
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-//    public function actionQuery()
-//    {
-//        return $this->handleQuery(MusicArrange::tableName());
-//        $limit = RequestHelper::getRequest()->get('limit');
-//        $offset = RequestHelper::getRequest()->get('offset');
-//        $deviceNo = RequestHelper::getRequest()->get('queryNo');
-//        $deviceName = RequestHelper::getRequest()->get('queryName');
-//        $colNo = 'arrangeNo';
-//        $colName = 'arrangeName';
-//        if (empty($deviceNo) && empty($deviceName)) {
-//            return DBHelper::limitAll($limit,
-//                $offset,
-//                MusicArrange::tableName(),
-//                [$colNo, $colName]);
-//        }
-//
-//        if ($deviceNo) {
-//
-//            return DBHelper::limitWhere($limit,
-//                $offset,
-//                MusicArrange::tableName(),
-//                [$colNo, $colName],
-//                [$colNo => $deviceNo]);
-//        }
-//        if ($deviceName) {
-//            return DBHelper::limitWhere($limit, $offset,
-//                MusicArrange::tableName(),
-//                [$colNo, $colName],
-//                ['like', $colName, $deviceName]);
-//
-//        }
-//    }
+    public function actionQuery()
+    {
+        return $this->handleQuery(MusicArrange::tableName(), 'arrangeNo', 'arrangeName');
+    }
 }

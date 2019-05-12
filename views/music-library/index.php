@@ -10,12 +10,26 @@ use yii\grid\GridView;
 $this->title = Yii::t('app', 'Music Libraries');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
+<script>
+    $(function () {
+
+        $('#fileupload').fileupload({
+            url: 'create'
+        });
+    });
+    function uploadMusic() {
+        $('#jqUploadModel').modal('show');
+    }
+</script>
+
+<?php echo $this->render('@app/views/cmpt/jqupload'); ?>
 <div class="music-library-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Create Music Library'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', 'Create Music Library'), null, ['class' => 'btn btn-success','onclick'=>'uploadMusic()']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -35,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'md5',
             //'createTime',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn','template' => '{view} {delete}'],
         ],
     ]); ?>
 

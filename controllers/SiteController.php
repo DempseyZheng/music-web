@@ -2,6 +2,9 @@
 
 namespace app\controllers;
 
+use app\utils\Debugger;
+use app\utils\MongoService;
+use app\utils\RequestHelper;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -49,9 +52,9 @@ class SiteController extends Controller
     public function actions()
     {
         return [
-            'error' => [
-                'class' => 'yii\web\ErrorAction',
-            ],
+//            'error' => [
+//                'class' => 'app\utils\MyErrorAction',
+//            ],
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
@@ -129,8 +132,29 @@ class SiteController extends Controller
      *
      * @return string
      */
-    public function actionAbout()
+    public function actionDownload()
     {
-        return $this->render('about');
+        $id = RequestHelper::getRequest()->get("id");
+        if (empty($id)||$id==='null'){
+            return '未找到该文件';
+        }
+        Debugger::log($id,'下载');
+        $id = MongoService::getId($id);
+        $bucket = MongoService::getDB()->selectGridFSBucket();
+        $file = $bucket->findOne(['_id' => $id]);
+        header("Content-type:application/octet-stream");
+        header("Accept-Ranges:bytes");
+        header("Accept-Length:".$file['length']);
+        header("Content-Disposition: attachment; filename=".$file['filename']);
+        $stram = $bucket->openDownloadStream($id);
+        $img = stream_get_contents($stram);
+
+        return $img;
     }
+    public function actionError(){
+
+        $error = Yii::$app->errorHandler->exception;
+        Debugger::log($error->getMessage(),'ERROR');
+    }
+
 }

@@ -54,8 +54,6 @@ class Utils
     }
 
 
-
-
     public static function micTime()
     {
         list($msec, $sec) = explode(' ', microtime());
@@ -102,5 +100,50 @@ class Utils
         } catch (\Exception $e) {
             return $e->getMessage();
         }
+    }
+
+
+    public static function secToTime($seconds)
+    {
+//        $result = '00:00:00';
+//        if ($times > 0) {
+//
+//            $hour = self::preZero(floor($times / 3600));
+//
+//            $minute =self::preZero( floor(($times - 3600 * $hour) / 60));
+//            $second =self::preZero( floor((($times - 3600 * $hour) - 60 * $minute) % 60));
+//            $result = $hour . ':' . $minute . ':' . $second;
+//        }
+//        return $result;
+
+        if ($seconds >3600){
+            $hours =self::preZero(intval($seconds/3600));
+            $minutes = $seconds % 3600;
+            $time = $hours.":".gmstrftime('%M:%S',$minutes);
+        }else{
+            $time = gmstrftime('%H:%M:%S',$seconds);
+        }
+        return$time;
+    }
+
+    public static function preZero($num)
+    {
+        if (strlen($num) == 2) {
+            return $num;
+        }
+        return "0" . $num;
+
+    }
+
+    public static function formatSize($size, $digits = 2)
+    {
+        $unit = array('', 'K', 'M', 'G', 'T', 'P');
+        $base = 1024;
+        $i = floor(log($size, $base));
+        $n = count($unit);
+        if ($i >= $n) {
+            $i = $n - 1;
+        }
+        return round($size / pow($base, $i), $digits) . ' ' . $unit[$i] . 'B';
     }
 }

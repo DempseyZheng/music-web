@@ -2,7 +2,9 @@
 
 namespace app\models;
 
+use app\utils\Utils;
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "music_library".
@@ -18,7 +20,7 @@ use Yii;
  *
  * @property MusicArrangeItem[] $musicArrangeItems
  */
-class MusicLibrary extends \yii\db\ActiveRecord
+class MusicLibrary extends BaseAR
 {
     /**
      * {@inheritdoc}
@@ -52,13 +54,13 @@ class MusicLibrary extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'musicNo' => 'Music No',
-            'musicName' => 'Music Name',
-            'musicSize' => 'Music Size',
-            'musicUrl' => 'Music Url',
-            'playTime' => 'Play Time',
+            'musicNo' => '音乐编号',
+            'musicName' => '音乐名称',
+            'musicSize' => '音乐大小',
+            'musicUrl' => '音乐Url',
+            'playTime' => '播放时长',
             'md5' => 'Md5',
-            'createTime' => 'Create Time',
+            'createTime' => '创建时间',
         ];
     }
 
@@ -69,4 +71,5 @@ class MusicLibrary extends \yii\db\ActiveRecord
     {
         return $this->hasMany(MusicArrangeItem::className(), ['musicNo' => 'musicNo']);
     }
+
 }

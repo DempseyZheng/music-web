@@ -92,8 +92,6 @@ BootstrapTableAsset::register($this);
         });
 
         $('#myModal').modal('show');
-
-
     }
 </script>
 <?php echo $this->render('@app/views/cmpt/querymodal'); ?>

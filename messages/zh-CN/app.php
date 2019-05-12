@@ -17,6 +17,21 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Music Arrange Devices' => '音乐播控',
+    'Create Music Arrange Device' => '创建播控',
+    'Update Music Arrange Device: {name}' => '更新播控: {name}',
+
+    'Music Stores' => '门店信息',
+    'Create Music Store' => '创建门店',
+    'Update Music Store: {name}' => '更新门店: {name}',
+
+    'Music Devices' => '设备管理',
+    'Create Music Device' => '创建设备',
+    'Update Music Device: {name}' => '更新设备: {name}',
+
+    'Music Libraries' => '音乐库',
+    'Create Music Library' => '创建音乐',
+    'Update Music Library: {name}' => '更新音乐: {name}',
     ' and ' => ' 与 ',
     '"{attribute}" does not support operator "{operator}".' => '"{attribute}" 不支持操作 "{operator}"',
     '(not set)' => '(未设置)',
@@ -138,8 +153,6 @@ return [
     'Yii Framework' => '@@Yii 框架@@',
     'Save' => '保存',
     'Create' => '创建',
-    'Music Libraries' => '音乐库',
-    'Create Music Library' => '创建音乐',
-    'Update Music Library: {name}' => '更新音乐: {name}',
+
 
 ];

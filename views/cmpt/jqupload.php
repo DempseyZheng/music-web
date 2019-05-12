@@ -37,7 +37,7 @@ JqueryUploadAsset::register($this);
 
                 <div id="files" class="files"></div>
             </div>
-        </div>
-    </div><!-- /.modal-content -->
-</div><!-- /.modal-dialog -->
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
