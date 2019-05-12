@@ -16,6 +16,8 @@ use Yii;
  */
 class MusicArrangeItem extends \yii\db\ActiveRecord
 {
+
+
     /**
      * {@inheritdoc}
      */
@@ -45,8 +47,8 @@ class MusicArrangeItem extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'arrangeNo' => 'Arrange No',
-            'musicNo' => 'Music No',
+            'arrangeNo' => '播期编号',
+            'musicNo' => '音乐编号',
         ];
     }
 

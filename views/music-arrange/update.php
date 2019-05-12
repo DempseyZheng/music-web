@@ -5,10 +5,10 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\MusicArrange */
 
-$this->title = 'Update Music Arrange: ' . $model->id;
+$this->title = '更新播期: ' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Music Arranges', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = '更新';
 ?>
 <div class="music-arrange-update">
 
@@ -16,7 +16,8 @@ $this->params['breadcrumbs'][] = 'Update';
 
     <?= $this->render('_form', [
         'model' => $model,
-        'items' => $items
+        'items' => $items,
+        'error' => $error,
     ]) ?>
 
 </div>

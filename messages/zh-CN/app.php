@@ -140,5 +140,6 @@ return [
     'Create' => '创建',
     'Music Libraries' => '音乐库',
     'Create Music Library' => '创建音乐',
+    'Update Music Library: {name}' => '更新音乐: {name}',
 
 ];

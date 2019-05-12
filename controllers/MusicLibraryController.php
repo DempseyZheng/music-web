@@ -12,7 +12,7 @@ use yii\filters\VerbFilter;
 /**
  * MusicLibraryController implements the CRUD actions for MusicLibrary model.
  */
-class MusicLibraryController extends Controller
+class MusicLibraryController extends BaseController
 {
     /**
      * {@inheritdoc}
@@ -123,5 +123,10 @@ class MusicLibraryController extends Controller
         }
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+    }
+
+    public function actionQuery()
+    {
+        return $this->handleQuery(MusicLibrary::tableName(),'musicNo','musicName');
     }
 }

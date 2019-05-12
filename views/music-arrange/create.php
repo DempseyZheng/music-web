@@ -5,8 +5,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\MusicArrange */
 
-$this->title = 'Create Music Arrange';
-$this->params['breadcrumbs'][] = ['label' => 'Music Arranges', 'url' => ['index']];
+$this->title = '创建播期';
+$this->params['breadcrumbs'][] = ['label' => '播期列表', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="music-arrange-create">
@@ -16,6 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $this->render('_form', [
         'model' => $model,
         'items' => $items,
+        'error' => $error,
     ]) ?>
 
 </div>

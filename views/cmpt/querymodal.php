@@ -5,7 +5,7 @@
 
         table.bootstrapTable('refresh', {
             // url: '/site/table',
-            query: {deviceName: $('#device_name_input').val()},
+            query: {queryName: $('#device_name_input').val()},
             pageNumber: 1
         });
     }
@@ -13,7 +13,7 @@
     function queryNo() {
         $('#table').bootstrapTable('refresh', {
             // url: '/site/table',
-            query: {deviceNo: $('#device_no_input').val()},
+            query: {queryNo: $('#device_no_input').val()},
             pageNumber: 1
         });
     }

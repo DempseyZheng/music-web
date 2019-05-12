@@ -9,9 +9,10 @@
 namespace app\controllers;
 
 
-
 use app\models\BaseModel;
+use app\utils\DBHelper;
 use app\utils\Debugger;
+use app\utils\RequestHelper;
 use Exception;
 use Yii;
 use yii\base\Module;
@@ -38,8 +39,9 @@ class BaseController extends Controller
         parent::__construct($id, $module, $config);
     }
 
-    protected function multipleCreate($modelCustomer,$modelsAddress,$clsName,$call){
-
+    protected function multipleCreate($modelCustomer, $modelsAddress, $clsName, $call)
+    {
+        $error = '';
         if ($modelCustomer->load(Yii::$app->request->post())) {
 
             $modelsAddress = BaseModel::createMultiple($clsName);
@@ -55,10 +57,9 @@ class BaseController extends Controller
                 try {
                     if ($flag = $modelCustomer->save(false)) {
                         foreach ($modelsAddress as $modelAddress) {
-                            $iscall=is_callable($call);
-                        $modelAddress=    call_user_func($call,$modelCustomer,$modelAddress);
-//                            $modelAddress->a = $modelCustomer->id;
-                            if (! ($flag = $modelAddress->save(false))) {
+                            $modelAddress = call_user_func($call, $modelCustomer, $modelAddress);
+                            if (!($flag = $modelAddress->save(false))) {
+                                $modelAddress->error;
                                 $transaction->rollBack();
                                 break;
                             }
@@ -66,19 +67,26 @@ class BaseController extends Controller
                     }
                     if ($flag) {
                         $transaction->commit();
-                       return  $this->redirect(['view', 'id' => $modelCustomer->id]);
+                        return $this->redirect(['view', 'id' => $modelCustomer->id]);
 
                     }
                 } catch (Exception $e) {
                     $transaction->rollBack();
-
+                    $error = $e->getMessage();
+                    Debugger::debug($error);
+                }
+            } else {
+                foreach ($modelsAddress as $modelAddress) {
+                    $modelAddress->errors;
                 }
             }
         }
-        return[ $modelCustomer,$modelsAddress];
+        return [$modelCustomer, $modelsAddress, $error];
     }
 
-    protected function multipleUpdate($modelCustomer,$modelsAddress,$clsName,$call){
+    protected function multipleUpdate($modelCustomer, $modelsAddress, $clsName, $call)
+    {
+        $error = '';
         if ($modelCustomer->load(Yii::$app->request->post())) {
 
             $oldIDs = ArrayHelper::map($modelsAddress, 'id', 'id');
@@ -94,13 +102,13 @@ class BaseController extends Controller
                 $transaction = \Yii::$app->db->beginTransaction();
                 try {
                     if ($flag = $modelCustomer->save(false)) {
-                        if (! empty($deletedIDs)) {
+                        if (!empty($deletedIDs)) {
 //                            Address::deleteAll(['id' => $deletedIDs]);
-                            call_user_func($call,['id' => $deletedIDs]);
+                            call_user_func($call, ['id' => $deletedIDs]);
                         }
                         foreach ($modelsAddress as $modelAddress) {
 //                            $modelAddress->customer_id = $modelCustomer->id;
-                            if (! ($flag = $modelAddress->save(false))) {
+                            if (!($flag = $modelAddress->save(false))) {
                                 $transaction->rollBack();
                                 break;
                             }
@@ -112,9 +120,41 @@ class BaseController extends Controller
                     }
                 } catch (Exception $e) {
                     $transaction->rollBack();
+                    $error = $e->getMessage();
                 }
             }
         }
-        return[ $modelCustomer,$modelsAddress];
+        return [$modelCustomer, $modelsAddress, $error];
+    }
+
+    protected function handleQuery($tbName, $colNo, $colName)
+    {
+        $limit = RequestHelper::getRequest()->get('limit');
+        $offset = RequestHelper::getRequest()->get('offset');
+        $deviceNo = RequestHelper::getRequest()->get('queryNo');
+        $deviceName = RequestHelper::getRequest()->get('queryName');
+
+        if (empty($deviceNo) && empty($deviceName)) {
+            return DBHelper::limitAll($limit,
+                $offset,
+                $tbName,
+                [$colNo, $colName]);
+        }
+
+        if ($deviceNo) {
+
+            return DBHelper::limitWhere($limit,
+                $offset,
+                $tbName,
+                [$colNo, $colName],
+                [$colNo => $deviceNo]);
+        }
+        if ($deviceName) {
+            return DBHelper::limitWhere($limit, $offset,
+                $tbName,
+                [$colNo, $colName],
+                ['like', $colName, $deviceName]);
+
+        }
     }
 }

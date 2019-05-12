@@ -95,17 +95,11 @@ class MusicArrangeController extends BaseController
             return $arr;
         }
 
-//        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-//            $dbDate = substr($model->arrangeNo, 2, 8);
-//            $dbNo = (int)substr($model->arrangeNo, 10);
-//            RedisHelper::getRedis()->set(NoBuilder::ARRANGE_KEY, $dbNo);
-//            RedisHelper::getRedis()->set(NoBuilder::ARRANGE_DATE_KEY, $dbDate);
-//            return $this->redirect(['view', 'id' => $model->id]);
-//        }
         $arr[0]->arrangeNo = NoBuilder::getArrangeNo();
         return $this->render('create', [
             'model' => $arr[0],
             'items' => $arr[1],
+            'error'=>$arr[2]
         ]);
     }
 
@@ -116,7 +110,7 @@ class MusicArrangeController extends BaseController
 
     public static function createCall($modelArrange, $modelItem)
     {
-        Debugger::debug('ssss');
+
         $modelItem->arrangeNo = $modelArrange->arrangeNo;
         return $modelItem;
     }
@@ -138,6 +132,7 @@ class MusicArrangeController extends BaseController
         return $this->render('update', [
             'model' => $arr[0],
             'items' => $arr[1],
+            'error'=>$arr[2]
         ]);
     }
 
@@ -171,35 +166,36 @@ class MusicArrangeController extends BaseController
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionQuery()
-    {
-        $limit = RequestHelper::getRequest()->get('limit');
-        $offset = RequestHelper::getRequest()->get('offset');
-        $deviceNo = RequestHelper::getRequest()->get('deviceNo');
-        $deviceName = RequestHelper::getRequest()->get('deviceName');
-        $colNo = 'arrangeNo';
-        $colName = 'arrangeName';
-        if (empty($deviceNo) && empty($deviceName)) {
-            return DBHelper::limitAll($limit,
-                $offset,
-                MusicArrange::tableName(),
-                [$colNo, $colName]);
-        }
-
-        if ($deviceNo) {
-
-            return DBHelper::limitWhere($limit,
-                $offset,
-                MusicArrange::tableName(),
-                [$colNo, $colName],
-                [$colNo => $deviceNo]);
-        }
-        if ($deviceName) {
-            return DBHelper::limitWhere($limit, $offset,
-                MusicArrange::tableName(),
-                [$colNo, $colName],
-                ['like', $colName, $deviceName]);
-
-        }
-    }
+//    public function actionQuery()
+//    {
+//        return $this->handleQuery(MusicArrange::tableName());
+//        $limit = RequestHelper::getRequest()->get('limit');
+//        $offset = RequestHelper::getRequest()->get('offset');
+//        $deviceNo = RequestHelper::getRequest()->get('queryNo');
+//        $deviceName = RequestHelper::getRequest()->get('queryName');
+//        $colNo = 'arrangeNo';
+//        $colName = 'arrangeName';
+//        if (empty($deviceNo) && empty($deviceName)) {
+//            return DBHelper::limitAll($limit,
+//                $offset,
+//                MusicArrange::tableName(),
+//                [$colNo, $colName]);
+//        }
+//
+//        if ($deviceNo) {
+//
+//            return DBHelper::limitWhere($limit,
+//                $offset,
+//                MusicArrange::tableName(),
+//                [$colNo, $colName],
+//                [$colNo => $deviceNo]);
+//        }
+//        if ($deviceName) {
+//            return DBHelper::limitWhere($limit, $offset,
+//                MusicArrange::tableName(),
+//                [$colNo, $colName],
+//                ['like', $colName, $deviceName]);
+//
+//        }
+//    }
 }

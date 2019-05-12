@@ -24,21 +24,17 @@ BootstrapTableAsset::register($this);
     var isDbClick = false;
     $(function () {
         initTable({id: '#table'}, onDbClick);
+
+        // $(".dynamicform_wrapper").on("beforeInsert", function(e, item) {
+        //     console.log(e);
+        //     console.log(item);
+        // });
     });
 
     function onDbClick(row) {
         isDbClick = true;
-        var msg = '';
-        switch ($('#model_type').text()) {
-            case "1":
-                msg = row.deviceNo;
-                // $('#model_value').text(row.deviceNo);
-                break;
-            case "2":
-                msg = row.arrangeNo;
-                // $('#model_value').text(row.arrangeNo);
-                break;
-        }
+        var msg = row.musicNo;
+        // console.log(msg);
         $('#' + $('#model_id').text()).val(msg);
         $('#myModal').modal('hide');
     }
@@ -63,8 +59,8 @@ BootstrapTableAsset::register($this);
                 return {
                     offset: params.offset,  //页码
                     limit: params.limit,   //页面大小
-                    deviceNo: $('#device_no_input').val(),
-                    deviceName: $('#device_name_input').val(),
+                    queryNo: $('#device_no_input').val(),
+                    queryName: $('#device_name_input').val(),
                 };
             },
 
@@ -73,15 +69,37 @@ BootstrapTableAsset::register($this);
         });
     }
 
+    function onSearch(obj) {
+
+        var input = $(obj).parent().find('.form-control');
+
+        $('#model_id').text(input.attr('id'));
+        $('#device_name_input').val('');
+        $('#device_no_input').val('');
+
+        $('#table').bootstrapTable('refreshOptions', {
+            url: '/music-library/query',
+            columns: [
+                {
+                    field: 'musicNo',
+                    title: '音乐编号',
+                    width: '10%',
+                },
+                {
+                    field: 'musicName',
+                    title: '音乐名称',
+                }]
+        });
+
+        $('#myModal').modal('show');
+
+
+    }
 </script>
 <?php echo $this->render('@app/views/cmpt/querymodal'); ?>
 <div class="music-arrange-form">
 
     <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
-
-    <!--   $form->field($model, 'arrangeNo')->widget(\app\widgets\SearchInput::className(), [-->
-    <!--        'searchType' => 1-->
-    <!--   ])-->
 
     <?= $form->field($model, 'arrangeNo')->textInput(['value' => $model->arrangeNo, 'readonly' => 'readonly'])->label('播期编号') ?>
     <?= $form->field($model, 'arrangeName')->textInput(['maxlength' => true, 'placeholder' => '请输入播期名称'])->label('播期名称') ?>
@@ -129,7 +147,12 @@ BootstrapTableAsset::register($this);
     <?= $form->field($model, 'arrangeLevel')->textInput() ?>
 
     <div class="panel panel-default">
-        <div class="panel-heading"><h4><i class="glyphicon glyphicon-envelope"></i> 音乐列表</h4></div>
+        <div class="panel-heading"><h4><i class="glyphicon glyphicon-envelope"></i> 音乐列表</h4>
+<!--            <p style="color: red"></p>-->
+        <?php if ($error){
+          echo  Html::tag('p',$error,['style'=>'color: red']);
+        } ?>
+        </div>
         <div class="panel-body">
             <?php DynamicFormWidget::begin([
                 'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
@@ -174,9 +197,7 @@ BootstrapTableAsset::register($this);
                             ?>
 
 
-                            <?= $form->field($modelMusic, "[{$i}]musicNo")->textInput(['maxlength' => true]) ?>
-
-
+                            <?= $form->field($modelMusic, "[{$i}]musicNo")->widget(\app\widgets\DynamicSearchInput::className()) ?>
 
                         </div>
                     </div>
@@ -185,6 +206,7 @@ BootstrapTableAsset::register($this);
             <?php DynamicFormWidget::end(); ?>
         </div>
     </div>
+
 
     <div class="form-group">
         <?= Html::submitButton('保存', ['class' => 'btn btn-success']) ?>
