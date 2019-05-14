@@ -49,4 +49,8 @@ class RequestHelper
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     }
+    public static function formatHtml()
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+    }
 }

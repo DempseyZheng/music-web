@@ -37,13 +37,22 @@ $this->params['breadcrumbs'][] = $this->title;
             'endDate',
             'beginTime',
             'endTime',
-            'arrangeLevel',
+//            'arrangeLevel',
+            [
+                'attribute' => 'arrangeLevel',
+                'value' => function ($model) {
+                    if ($model->arrangeLevel == 0) {
+                        return '普通';
+                    }
+                    return '高';
+                }
+            ],
             'createTime',
             'updateTime',
         ],
     ]) ?>
 
-    <hr style="height:1px;border:none;border-top:1px dashed #000;" />
+    <hr style="height:1px;border:none;border-top:1px dashed #000;"/>
     <h4>音乐列表</h4>
     <?php foreach ($items as $i => $modelAddress): ?>
         <?= DetailView::widget([

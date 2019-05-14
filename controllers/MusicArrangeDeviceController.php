@@ -72,7 +72,12 @@ class MusicArrangeDeviceController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $arrange = MusicArrange::findOne(['arrangeNo' => $model->arrangeNo]);
             $device = MusicDevice::findOne(['deviceNo' => $model->deviceNo]);
-
+if ($arrange==null||$device==null){
+    return $this->render('create', [
+        'model' => $model,
+        'error'=>'请输入正确的数据'
+    ]);
+}
             $model->arrangeName = $arrange->arrangeName;
             $model->beginDate = $arrange->beginDate;
             $model->endDate = $arrange->endDate;
@@ -87,6 +92,7 @@ class MusicArrangeDeviceController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'error'=>null
         ]);
     }
 
@@ -107,6 +113,7 @@ class MusicArrangeDeviceController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            'error'=>null
         ]);
     }
 

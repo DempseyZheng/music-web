@@ -15,6 +15,11 @@ $config = [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'helloWorld',
+            'enableCsrfValidation' => false,
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+                'text/json' => 'yii\web\JsonParser',
+            ],
         ],
         'cache' => [
             // 'class' => 'yii\caching\FileCache',
@@ -31,8 +36,8 @@ $config = [
             'enableAutoLogin' => true,
         ],
         'errorHandler' => [
-            'errorAction'=>'site/error',
-//            'class' => 'app\utils\MyErrorHandler',
+//            'errorAction'=>'site/error',
+            'class' => 'app\utils\MyErrorHandler',
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
@@ -56,6 +61,8 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'accv-music-web/feign_api/music_device/register'=>'/music-device/register',
+                'accv-music-web/feign_api/music_arrange/arrange'=>'/music-arrange/arrange',
             ],
         ],
 

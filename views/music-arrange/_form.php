@@ -142,11 +142,13 @@ BootstrapTableAsset::register($this);
             'todayBtn' => true
         ]]); ?>
 
-    <?= $form->field($model, 'arrangeLevel')->textInput() ?>
+
+<?= $form->field($model,'arrangeLevel')->dropDownList([
+    '0'=>'普通','1'=>'高'
+]);?>
 
     <div class="panel panel-default">
         <div class="panel-heading"><h4><i class="glyphicon glyphicon-envelope"></i> 音乐列表</h4>
-<!--            <p style="color: red"></p>-->
         <?php if ($error){
           echo  Html::tag('p',$error,['style'=>'color: red']);
         } ?>

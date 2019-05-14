@@ -69,4 +69,8 @@ app\assets\QueryTableAsset::register($this);
 
     <?php ActiveForm::end(); ?>
 
+    <?php if ($error){
+        echo Html::tag('p',$error,['style'=>'color: red']);
+    }
+    ?>
 </div>

@@ -2,6 +2,14 @@
 
 namespace app\controllers;
 
+use app\models\MusicStore;
+use app\utils\Constants;
+use app\utils\DBHelper;
+use app\utils\Debugger;
+use app\utils\RedisHelper;
+use app\utils\RequestHelper;
+use app\utils\Utils;
+use app\utils\WebsocketUtil;
 use Yii;
 use app\models\MusicDevice;
 use app\models\MusicDeviceSearch;
@@ -14,6 +22,10 @@ use yii\filters\VerbFilter;
  */
 class MusicDeviceController extends BaseController
 {
+
+//    public $enableCsrfValidation = false;
+
+
     /**
      * {@inheritdoc}
      */
@@ -65,7 +77,6 @@ class MusicDeviceController extends BaseController
     public function actionCreate()
     {
         $model = new MusicDevice();
-
         if ($model->load(Yii::$app->request->post()) && $model->doSave()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -124,8 +135,102 @@ class MusicDeviceController extends BaseController
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
+
     public function actionQuery()
     {
         return $this->handleQuery(MusicDevice::tableName(), 'deviceNo', 'deviceName');
+    }
+
+    public function actionMultiDelete()
+    {
+        $ids = RequestHelper::getRequest()->post('ids');
+        $row = MusicDevice::multiDelete($ids);
+        if ($row > 0) {
+            $this->redirect('index');
+        }
+
+    }
+
+    public static function getRegState($devId)
+    {
+
+        $device = MusicDevice::findOne(['mac' => $devId]);
+
+        if ($device) {
+            return $device->registerStatus;
+        } else {
+            return 0;
+        }
+    }
+
+    public static function getStoreInfo($devId)
+    {
+        $device = MusicDevice::findOne(['mac' => $devId]);
+
+        $store = MusicStore::findOne(['storeNo' => $device->storeNo]);
+        $device->storeName = $store->storeName;
+        return $device;
+    }
+
+    public function actionRegister()
+    {
+        $req = RequestHelper::getRequest();
+        $devId = $req->post('devId');
+        $regCode = $req->post('registerCode');
+        Debugger::debug($devId . '==' . $regCode);
+
+        $row = MusicDevice::findOne(['mac' => $regCode]);
+
+        if ($row) {
+            $row->mac = $devId;
+            $row->registerStatus = 1;
+            $row->update();
+
+            return RequestHelper::successMsg();
+        }
+        return RequestHelper::errMsg('注册失败');
+    }
+
+    public static function logout($devId)
+    {
+        $flag = MusicDevice::findOne(['mac' => $devId]);
+
+        if ($flag) {
+            $flag->mac = Utils::getRegCode();
+            $flag->registerStatus = 0;
+            $flag->update();
+            return RequestHelper::successMsg();
+        }
+
+        return RequestHelper::errMsg('失败');
+    }
+
+    public function actionRestart()
+    {
+        $ids = RequestHelper::getRequest()->post('ids');
+        $arr = DBHelper::newQuery()
+            ->select('mac')
+            ->from(MusicDevice::tableName())
+            ->where(['in', 'id', $ids])
+            ->all();
+
+        Debugger::toJson($arr, 'restart');
+        WebsocketUtil::handleRestart($arr);
+
+    }
+
+    public function actionSetVolume()
+    {
+        $ids = RequestHelper::getRequest()->post('ids');
+        $volume = RequestHelper::getRequest()->post('volume');
+        Debugger::debug($volume);
+        $arr = DBHelper::newQuery()
+            ->select('mac')
+            ->from(MusicDevice::tableName())
+            ->where(['in', 'id', $ids])
+            ->all();
+
+        Debugger::toJson($arr, 'restart');
+        WebsocketUtil::handleSetVolume($arr,$volume);
     }
 }

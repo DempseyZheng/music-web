@@ -34,8 +34,26 @@ $this->params['breadcrumbs'][] = $this->title;
             'deviceName',
             'mac',
             'storeNo',
-            'onlineStatus',
-            'registerStatus',
+//            'onlineStatus',
+            [
+                'attribute' => 'onlineStatus',
+                'value' => function ($model) {
+                    if ($model->onlineStatus == 0) {
+                        return '离线';
+                    }
+                    return '在线';
+                }
+            ],
+//            'registerStatus',
+            [
+                'attribute' => 'registerStatus',
+                'value' => function ($model) {
+                    if ($model->onlineStatus == 0) {
+                        return '未注册';
+                    }
+                    return '已注册';
+                }
+            ],
             'storageCard',
             'appVersion',
             'deviceSound',

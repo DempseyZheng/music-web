@@ -41,7 +41,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'endDate',
             'beginTime',
             'endTime',
-            'arrangeLevel',
+            [
+                'attribute' => 'arrangeLevel',
+                'value' => function ($model) {
+                    if ($model->arrangeLevel == 0) {
+                        return '普通';
+                    }
+                    return '高';
+                }
+            ],
             'createTime',
             'updateTime',
         ],

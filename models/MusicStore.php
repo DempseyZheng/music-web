@@ -55,4 +55,5 @@ class MusicStore extends BaseAR
             'updateTime' => '修改时间',
         ];
     }
+
 }

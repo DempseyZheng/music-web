@@ -39,7 +39,7 @@ class MusicDevice extends BaseAR
     public function rules()
     {
         return [
-            [['deviceNo', 'deviceName', 'mac', 'storeNo', 'onlineStatus', 'registerStatus'], 'required'],
+            [['deviceNo', 'deviceName', 'storeNo'], 'required'],
             [['onlineStatus', 'registerStatus'], 'integer'],
             [['lastMsgTime', 'createTime', 'updateTime'], 'safe'],
             [['deviceNo', 'storageCard'], 'string', 'max' => 10],
@@ -48,6 +48,7 @@ class MusicDevice extends BaseAR
             [['appVersion'], 'string', 'max' => 30],
             [['deviceNo'], 'unique'],
             [['mac'], 'unique'],
+            [['storeNo'], 'exist', 'skipOnError' => true, 'targetClass' => MusicStore::className(), 'targetAttribute' => ['storeNo' => 'storeNo']],
         ];
     }
 
@@ -76,5 +77,7 @@ class MusicDevice extends BaseAR
     {
         $this->onlineStatus=0;
         $this->registerStatus=0;
+        $this->mac = Utils::getRegCode();
     }
+
 }

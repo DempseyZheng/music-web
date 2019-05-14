@@ -170,4 +170,13 @@ class MusicArrangeController extends BaseController
     {
         return $this->handleQuery(MusicArrange::tableName(), 'arrangeNo', 'arrangeName');
     }
+
+    /**
+     * 下载播期
+     */
+    public function actionArrange()
+    {
+RequestHelper::getRequest()->post('deviceNo');
+RequestHelper::getRequest()->post('arrangeList');
+    }
 }

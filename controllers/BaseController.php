@@ -23,6 +23,7 @@ use yii\widgets\ActiveForm;
 
 class BaseController extends Controller
 {
+    public $enableCsrfValidation = false;
     public $access;
 
     public function __construct($id, Module $module, array $config = [])

@@ -15,14 +15,8 @@ use yii\db\ActiveRecord;
 
 class BaseAR extends ActiveRecord
 {
-
-    public function setDefaultData($that)
-    {
-        $that->setAttribute('createTime',Utils::defaultDate());
-    }
-
-    public function doSave(){
-      $result=  $this->save();
+    public function doSave($runValidation = true){
+      $result=  $this->save($runValidation);
 
       if (!$result){
           Debugger::toJson($this->getErrors(),'保存失败');
@@ -33,16 +27,20 @@ class BaseAR extends ActiveRecord
 
     public function beforeSave($insert)
     {
-        if (parent::beforeSave($insert)) {
+//        if (parent::beforeSave($insert)) {
             if ($this->isNewRecord) {
                 $this->createTime = Utils::defaultDate();
-
+                $this->doBeforeSave();
             }else{
                 $this->updateTime = Utils::defaultDate();
-                $this->doBeforeSave();
             }
             return true;
-        }
-        return false;
+//        }
+//        return false;
+    }
+
+    public static function multiDelete($ids)
+    {
+       return self::deleteAll(['in','id', $ids]);
     }
 }

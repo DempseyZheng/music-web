@@ -106,4 +106,8 @@ class MusicArrange extends \yii\db\ActiveRecord
     {
         return $this->hasMany(MusicLibrary::className(), ['musicNo' => 'musicNo'])->viaTable('music_arrange_item', ['arrangeNo' => 'arrangeNo']);
     }
+//    public function getMusicArrange()
+//    {
+//        return $this->hasMany(MusicArrangeDevice::className(), ['arrangeNo' => 'arrangeNo']);
+//    }
 }

@@ -10,12 +10,46 @@ use yii\grid\GridView;
 $this->title = Yii::t('app', 'Music Devices');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<script>
+    function multiDelete() {
+        var keys = $("#grid").yiiGridView("getSelectedRows");
+        console.log(keys);
+        if (keys.length === 0) {
+            return
+        }
+        console.log('删除');
+        $.post('multi-delete', {ids: keys}, function (data) {
+            console.log(data);
+        })
+    }
+    function setVolume() {
+        var keys = $("#grid").yiiGridView("getSelectedRows");
+        if (keys.length === 0) {
+            return
+        }
+        $.post('set-volume', {ids: keys,volume:50}, function (data) {
+            console.log(data);
+        })
+    }
+    function restart() {
+        var keys = $("#grid").yiiGridView("getSelectedRows");
+        if (keys.length === 0) {
+            return
+        }
+        $.post('restart', {ids: keys}, function (data) {
+            console.log(data);
+        })
+    }
+</script>
 <div class="music-device-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
         <?= Html::a(Yii::t('app', 'Create Music Device'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('app', 'Delete'), "javascript:void(0);", ['class' => 'btn btn-success', 'onclick' => 'multiDelete()']) ?>
+        <?= Html::a('设置音量', "javascript:void(0);", ['class' => 'btn btn-success', 'onclick' => 'setVolume()']) ?>
+        <?= Html::a('重启设备', "javascript:void(0);", ['class' => 'btn btn-success', 'onclick' => 'restart()']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -23,19 +57,44 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'rowOptions' => function ($model, $key, $index, $grid) {
+            if ($model->onlineStatus === 1)
+                return ['class' => 'success'];
+        },
+
+        'options' => [
+            'id' => 'grid'
+        ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
+            ['class' => 'yii\grid\CheckboxColumn'],
 //            'id',
             'deviceNo',
             'deviceName',
             'mac',
             'storeNo',
-            'onlineStatus',
-            'registerStatus',
-            'storageCard',
+//            'onlineStatus',
+            [
+                'attribute' => 'onlineStatus',
+                'value' => function ($model, $key, $index, $column) {
+                    return $model->onlineStatus == 1 ? '在线' : '离线';
+                },
+                //在条件（过滤条件）中使用下拉框来搜索
+                'filter' => ['1' => '在线', '0' => '离线'],
+            ],
+
+//            'registerStatus',
+            [
+                'attribute' => 'registerStatus',
+                'value' => function ($model, $key, $index, $column) {
+                    return $model->registerStatus == 1 ? '已注册' : '未注册';
+                },
+                //在条件（过滤条件）中使用下拉框来搜索
+                'filter' => ['1' => '已注册', '0' => '未注册'],
+            ],
+//            'storageCard',
             'appVersion',
-            'deviceSound',
+//            'deviceSound',
             'lastMsgTime',
             //'createTime',
             //'updateTime',
