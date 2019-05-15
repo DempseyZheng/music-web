@@ -39,15 +39,21 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
             'musicNo',
             'musicName',
-            'musicSize',
-            'musicUrl',
-            //'playTime:datetime',
-            //'md5',
-            //'createTime',
+//            'musicSize',
+            [
+                'attribute' => 'musicSize',
+                'value' => function ($model) {
+                    return \app\utils\Utils::formatSize($model->musicSize);
+                }
+            ],
+            [
+                'attribute' => 'playTime',
+                'value' => function ($model) {
+                    return \app\utils\Utils::secToTime($model->playTime);
+                }
+            ],
 
             ['class' => 'yii\grid\ActionColumn','template' => '{view} {delete}'],
         ],

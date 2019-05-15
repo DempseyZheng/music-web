@@ -74,7 +74,7 @@ class MusicArrangeController extends BaseController
     public function actionView($id)
     {
         $model = $this->findModel($id);
-        $items = $model->musicArrangeItems;
+        $items = $model->musicNos;
 
         return $this->render('view', [
             'model' => $model,
@@ -99,15 +99,19 @@ class MusicArrangeController extends BaseController
         return $this->render('create', [
             'model' => $arr[0],
             'items' => $arr[1],
-            'error'=>$arr[2]
+            'error' => $arr[2]
         ]);
     }
 
-    public static function updateCall($condition)
+    public static function updateDelCall($condition)
     {
         MusicArrangeItem::deleteAll($condition);
     }
-
+    public static function updateCall($modelArrange, $modelItem)
+    {
+        $modelItem->arrangeNo = $modelArrange->arrangeNo;
+        return $modelItem;
+    }
     public static function createCall($modelArrange, $modelItem)
     {
 
@@ -125,14 +129,18 @@ class MusicArrangeController extends BaseController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $arr = $this->multipleUpdate($model, $model->musicArrangeItems, MusicArrangeItem::className(), __NAMESPACE__ . '\MusicArrangeController::updateCall');
+        $arr = $this->multipleUpdate($model,
+            $model->musicArrangeItems,
+            MusicArrangeItem::className(),
+            __NAMESPACE__ . '\MusicArrangeController::updateCall',
+            __NAMESPACE__ . '\MusicArrangeController::updateDelCall');
         if (!is_array($arr)) {
             return $arr;
         }
         return $this->render('update', [
             'model' => $arr[0],
             'items' => $arr[1],
-            'error'=>$arr[2]
+            'error' => $arr[2]
         ]);
     }
 
@@ -171,12 +179,4 @@ class MusicArrangeController extends BaseController
         return $this->handleQuery(MusicArrange::tableName(), 'arrangeNo', 'arrangeName');
     }
 
-    /**
-     * 下载播期
-     */
-    public function actionArrange()
-    {
-RequestHelper::getRequest()->post('deviceNo');
-RequestHelper::getRequest()->post('arrangeList');
-    }
 }

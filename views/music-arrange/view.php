@@ -58,8 +58,22 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= DetailView::widget([
             'model' => $modelAddress,
             'attributes' => [
-                'id',
                 'musicNo',
+                'musicName',
+                [
+                    'attribute' => 'musicSize',
+                    'value' => function ($model) {
+                        return \app\utils\Utils::formatSize($model->musicSize);
+                    }
+                ],
+                'musicUrl',
+                [
+                    'attribute' => 'playTime',
+                    'value' => function ($model) {
+                        return \app\utils\Utils::secToTime($model->playTime);
+                    }
+                ],
+                'md5'
             ],
         ]) ?>
     <?php endforeach; ?>

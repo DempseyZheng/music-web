@@ -127,30 +127,7 @@ class SiteController extends Controller
         ]);
     }
 
-    /**
-     * Displays about page.
-     *
-     * @return string
-     */
-    public function actionDownload()
-    {
-        $id = RequestHelper::getRequest()->get("id");
-        if (empty($id)||$id==='null'){
-            return '未找到该文件';
-        }
-        Debugger::log($id,'下载');
-        $id = MongoService::getId($id);
-        $bucket = MongoService::getDB()->selectGridFSBucket();
-        $file = $bucket->findOne(['_id' => $id]);
-        header("Content-type:application/octet-stream");
-        header("Accept-Ranges:bytes");
-        header("Accept-Length:".$file['length']);
-        header("Content-Disposition: attachment; filename=".$file['filename']);
-        $stram = $bucket->openDownloadStream($id);
-        $img = stream_get_contents($stram);
 
-        return $img;
-    }
     public function actionError(){
 
         $error = Yii::$app->errorHandler->exception;

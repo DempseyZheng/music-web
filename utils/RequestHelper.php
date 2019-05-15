@@ -15,6 +15,10 @@ class RequestHelper
     {
         return Yii::$app->request;
 }
+    public static function setStatusCode($code)
+    {
+        return Yii::$app->response->setStatusCode($code);
+    }
     public static function successMsg()
     {
         return '{"flag":{"retCode":"0","retMsg":"success"}}';

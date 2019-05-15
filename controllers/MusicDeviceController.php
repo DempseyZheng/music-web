@@ -213,7 +213,6 @@ class MusicDeviceController extends BaseController
             ->from(MusicDevice::tableName())
             ->where(['in', 'id', $ids])
             ->all();
-
         Debugger::toJson($arr, 'restart');
         WebsocketUtil::handleRestart($arr);
 

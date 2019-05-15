@@ -2,8 +2,11 @@
 
 namespace app\controllers;
 
+use app\models\MusicArrange;
 use app\models\MusicArrangeDevice;
+use app\models\MusicArrangeItem;
 use app\models\MusicDevice;
+use app\models\MusicLibrary;
 use app\models\MusicStore;
 use app\models\SocketMessage;
 use app\utils\DBHelper;
@@ -123,11 +126,51 @@ class TestController extends Controller
 //        $obj[0];
 
 
-        $arr=  SocketMessage::find()->all();
+//        $deviceArranges=  DBHelper::newQuery()
+//            ->from(MusicArrangeDevice::tableName())
+//            ->where(['deviceNo'=>'D1003'])
+//            ->leftJoin(MusicArrangeItem::tableName(),'music_arrange_item.arrangeNo = music_arrange_device.arrangeNo')
+//            ->leftJoin(MusicLibrary::tableName(),'music_arrange_item.musicNo = music_library.musicNo')
+//            ->all();
+//        foreach ($deviceArranges as $deviceArrange) {
+//
+//        }
 
-        foreach ($arr as $item) {
-            Debugger::debug($item->devId);
+    $devices=    MusicArrangeDevice::findAll(['deviceNo'=>'D1003']);
+
+        $ans=[];
+        foreach ($devices as $device) {
+     $ans[]=$device->arrangeNo;
+    }
+    $arranges=    DBHelper::newQuery()
+            ->from(MusicArrange::tableName())
+            ->where(['in','arrangeNo',$ans])
+            ->all();
+
+     $musics=   DBHelper::newQuery()
+            ->from(MusicArrangeItem::tableName())
+            ->where(['in','arrangeNo',$ans])
+            ->leftJoin(MusicLibrary::tableName(),'music_arrange_item.musicNo = music_library.musicNo')
+            ->all();
+
+        foreach ($arranges as &$arrange) {
+            $arrMusic = [];
+            $totalSize = 0;
+            foreach ($musics as &$music) {
+                if ($music['arrangeNo'] === $arrange['arrangeNo']) {
+                    $totalSize += $music['musicSize'];
+                    $music['musicUrl'] = Utils::getHost() . "/music-app/" . $music['musicUrl'];
+                    $arrMusic[] = $music;
+                    continue;
+                }
+            }
+            $arrange['musics'] = $arrMusic;
+            $arrange ['totalSize']  = $totalSize;
+            $arrange ['createTime']  = strtotime($arrange ['createTime'] );
         }
+
+return Debugger::toJson($arranges,'');
+//        return $this->render('index');
     }
 
 }

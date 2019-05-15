@@ -35,6 +35,7 @@ class Debugger{
         return $data;
     }
     public static  function toJson($data, $title){
+
         return self::log(json_encode($data,JSON_UNESCAPED_UNICODE),$title);
     }
     public static  function fromJson($data, $title){

@@ -85,7 +85,7 @@ class BaseController extends Controller
         return [$modelCustomer, $modelsAddress, $error];
     }
 
-    protected function multipleUpdate($modelCustomer, $modelsAddress, $clsName, $call)
+    protected function multipleUpdate($modelCustomer, $modelsAddress, $clsName, $call,$delCall)
     {
         $error = '';
         if ($modelCustomer->load(Yii::$app->request->post())) {
@@ -105,10 +105,11 @@ class BaseController extends Controller
                     if ($flag = $modelCustomer->save(false)) {
                         if (!empty($deletedIDs)) {
 //                            Address::deleteAll(['id' => $deletedIDs]);
-                            call_user_func($call, ['id' => $deletedIDs]);
+                            call_user_func($delCall, ['id' => $deletedIDs]);
                         }
                         foreach ($modelsAddress as $modelAddress) {
 //                            $modelAddress->customer_id = $modelCustomer->id;
+                            $modelAddress = call_user_func($call, $modelCustomer, $modelAddress);
                             if (!($flag = $modelAddress->save(false))) {
                                 $transaction->rollBack();
                                 break;

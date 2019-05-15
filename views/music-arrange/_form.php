@@ -14,27 +14,18 @@ use app\assets\BootstrapTableAsset;
 use wbraganca\dynamicform\DynamicFormWidget;
 
 BootstrapTableAsset::register($this);
-//\app\assets\BootstrapEditableAsset::register($this);
 ?>
-<!--<link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/themes/default/easyui.css">-->
-<!--<link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/themes/icon.css">-->
-<!--<link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/themes/color.css">-->
+
 
 <script>
     var isDbClick = false;
     $(function () {
         initTable({id: '#table'}, onDbClick);
-
-        // $(".dynamicform_wrapper").on("beforeInsert", function(e, item) {
-        //     console.log(e);
-        //     console.log(item);
-        // });
     });
 
     function onDbClick(row) {
         isDbClick = true;
         var msg = row.musicNo;
-        // console.log(msg);
         $('#' + $('#model_id').text()).val(msg);
         $('#myModal').modal('hide');
     }
@@ -143,22 +134,22 @@ BootstrapTableAsset::register($this);
         ]]); ?>
 
 
-<?= $form->field($model,'arrangeLevel')->dropDownList([
-    '0'=>'普通','1'=>'高'
-]);?>
+    <?= $form->field($model, 'arrangeLevel')->dropDownList([
+        '0' => '普通', '1' => '高'
+    ]); ?>
 
     <div class="panel panel-default">
         <div class="panel-heading"><h4><i class="glyphicon glyphicon-envelope"></i> 音乐列表</h4>
-        <?php if ($error){
-          echo  Html::tag('p',$error,['style'=>'color: red']);
-        } ?>
+            <?php if ($error) {
+                echo Html::tag('p', $error, ['style' => 'color: red']);
+            } ?>
         </div>
         <div class="panel-body">
             <?php DynamicFormWidget::begin([
                 'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
                 'widgetBody' => '.container-items', // required: css class selector
                 'widgetItem' => '.item', // required: css class
-                'limit' => 4, // the maximum times, an element can be cloned (default 999)
+//                'limit' => 4, // the maximum times, an element can be cloned (default 999)
                 'min' => 1, // 0 or 1 (default 1)
                 'insertButton' => '.add-item', // css class
                 'deleteButton' => '.remove-item', // css class
@@ -166,12 +157,6 @@ BootstrapTableAsset::register($this);
                 'formId' => 'dynamic-form',
                 'formFields' => [
                     'musicNo',
-//                    'musicName',
-//                    'musicSize',
-//                    'musicUrl',
-//                    'playTime',
-//                    'md5',
-//                    'createTime'
                 ],
             ]); ?>
 

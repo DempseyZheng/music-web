@@ -1,5 +1,6 @@
 <?php
 
+use app\widgets\DateTimePicker;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 

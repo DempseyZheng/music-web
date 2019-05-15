@@ -61,8 +61,8 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'accv-music-web/feign_api/music_device/register'=>'/music-device/register',
-                'accv-music-web/feign_api/music_arrange/arrange'=>'/music-arrange/arrange',
+                'accv-music-web/feign_api/music_device/register'=>'/music-app/register',
+                'accv-music-web/feign_api/music_arrange/arrange'=>'/music-app/arrange',
             ],
         ],
 
