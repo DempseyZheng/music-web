@@ -222,14 +222,14 @@ class MusicDeviceController extends BaseController
     {
         $ids = RequestHelper::getRequest()->post('ids');
         $volume = RequestHelper::getRequest()->post('volume');
-        Debugger::debug($volume);
+
         $arr = DBHelper::newQuery()
             ->select('mac')
             ->from(MusicDevice::tableName())
             ->where(['in', 'id', $ids])
             ->all();
 
-        Debugger::toJson($arr, 'restart');
+        Debugger::toJson($arr, 'actionSetVolume');
         WebsocketUtil::handleSetVolume($arr,$volume);
     }
 }

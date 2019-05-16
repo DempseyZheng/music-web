@@ -18,6 +18,7 @@ class MongoService
 {
     public static function getDB()
     {
+
         $client=   new \MongoDB\Client("mongodb://localhost:27017");
         return   $client->basic;
     }

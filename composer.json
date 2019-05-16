@@ -27,7 +27,8 @@
         "yiisoft/yii2-redis": "~2.0.0",
         "newerton/yii2-dynamicform": "*",
         "mongodb/mongodb": "^1.4",
-        "workerman/workerman": "^3.5"
+        "workerman/workerman": "^3.5",
+
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

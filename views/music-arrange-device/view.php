@@ -33,8 +33,18 @@ $this->params['breadcrumbs'][] = $this->title;
             'storeNo',
             'deviceNo',
             'progress',
-            'pubStatus',
-            'arrangeStatus',
+            [
+                'attribute' => 'pubStatus',
+                'value' => function ($model) {
+                    return \app\controllers\MusicArrangeDeviceController::pubStatusValue($model->pubStatus);
+                }
+            ],
+            [
+                'attribute' => 'arrangeStatus',
+                'value' => function ($model) {
+                    return \app\controllers\MusicArrangeDeviceController::arrangeStatusValue($model->arrangeStatus);
+                }
+            ],
             'arrangeNo',
             'arrangeName',
             'beginDate',

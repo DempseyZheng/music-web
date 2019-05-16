@@ -9,8 +9,39 @@ use yii\grid\GridView;
 
 $this->title = Yii::t('app', 'Music Devices');
 $this->params['breadcrumbs'][] = $this->title;
+\app\assets\JquerySliderAsset::register($this);
+\app\assets\JqueryTipAsset::register($this);
 ?>
+
 <script>
+
+    $(function () {
+        var handle = $("#custom-handle");
+        $("#slider").slider({
+            orientation: "horizontal",
+            range: "min",
+            animate: true,
+            create: function () {
+                handle.text($(this).slider("value"));
+            },
+            slide: function (event, ui) {
+                handle.text(ui.value);
+            }
+        });
+
+    });
+
+    function onSlideConfirm() {
+        $('#slideModel').modal('hide');
+        var keys = $("#grid").yiiGridView("getSelectedRows");
+        if (keys.length === 0) {
+            return
+        }
+        $.post('set-volume', {ids: keys,volume:$("#slider").slider("value")}, function (data) {
+            console.log(data);
+        })
+    }
+
     function multiDelete() {
         var keys = $("#grid").yiiGridView("getSelectedRows");
         console.log(keys);
@@ -22,18 +53,19 @@ $this->params['breadcrumbs'][] = $this->title;
             console.log(data);
         })
     }
+
     function setVolume() {
-        var keys = $("#grid").yiiGridView("getSelectedRows");
-        if (keys.length === 0) {
-            return
-        }
-        $.post('set-volume', {ids: keys,volume:50}, function (data) {
-            console.log(data);
-        })
+       if ( $("#grid").yiiGridView("getSelectedRows").length===0){
+           xcsoft.error('请至少选择一个设备',2000);
+           return
+       }
+        $('#slideModel').modal('show')
     }
+
     function restart() {
         var keys = $("#grid").yiiGridView("getSelectedRows");
         if (keys.length === 0) {
+            xcsoft.error('请至少选择一个设备',2000);
             return
         }
         $.post('restart', {ids: keys}, function (data) {
@@ -41,7 +73,9 @@ $this->params['breadcrumbs'][] = $this->title;
         })
     }
 </script>
-<div class="music-device-index">
+
+<?php echo $this->render('@app/views/cmpt/slidemodel'); ?>
+<div class="music-device-index xctips-container">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -94,7 +128,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 //            'storageCard',
             'appVersion',
-//            'deviceSound',
+            'deviceSound',
             'lastMsgTime',
             //'createTime',
             //'updateTime',

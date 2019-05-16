@@ -23,7 +23,7 @@ class WebsocketUtil
     {
         $msg = new SocketMessage();
         $msg->devId = $devId;
-        $msg->message =Debugger::toJson($message,'发送消息') ;
+        $msg->message =Debugger::toJson($message,'发送消息'.$devId) ;
         $msg->doSave();
     }
 
@@ -66,7 +66,6 @@ class WebsocketUtil
 
         $replyObj->v = new \stdClass();
         $replyObj->v->volume = $volume;
-        Debugger::debug($volume);
         self::sendMsg($devId, $replyObj);
     }
 
@@ -240,9 +239,23 @@ class WebsocketUtil
 
     public static function handleSetVolume(array $arr,$volume)
     {
-        Debugger::debug($volume);
+
         foreach ($arr as $item) {
             self::sendVolume($item['mac'],$volume);
+        }
+    }
+
+    public static function handlePublish(array $arr)
+    {
+        foreach ($arr as $item) {
+            self::sendPublish($item['mac'],$item['arrangeNo']);
+        }
+    }
+
+    public static function handleUpdateStatus(array $arr, $status)
+    {
+        foreach ($arr as $item) {
+        self::sendArrangeStatus($item['mac'],$item['arrangeNo'],$status);
         }
     }
 

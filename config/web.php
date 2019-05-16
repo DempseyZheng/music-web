@@ -63,6 +63,7 @@ $config = [
             'rules' => [
                 'accv-music-web/feign_api/music_device/register'=>'/music-app/register',
                 'accv-music-web/feign_api/music_arrange/arrange'=>'/music-app/arrange',
+                'accv-music-web/feign_api/music_arrange/upload_download_status'=>'/music-app/upload-download-status',
             ],
         ],
 

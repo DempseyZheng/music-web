@@ -135,42 +135,50 @@ class TestController extends Controller
 //        foreach ($deviceArranges as $deviceArrange) {
 //
 //        }
-
-    $devices=    MusicArrangeDevice::findAll(['deviceNo'=>'D1003']);
-
-        $ans=[];
-        foreach ($devices as $device) {
-     $ans[]=$device->arrangeNo;
-    }
-    $arranges=    DBHelper::newQuery()
-            ->from(MusicArrange::tableName())
-            ->where(['in','arrangeNo',$ans])
-            ->all();
-
-     $musics=   DBHelper::newQuery()
-            ->from(MusicArrangeItem::tableName())
-            ->where(['in','arrangeNo',$ans])
-            ->leftJoin(MusicLibrary::tableName(),'music_arrange_item.musicNo = music_library.musicNo')
-            ->all();
-
-        foreach ($arranges as &$arrange) {
-            $arrMusic = [];
-            $totalSize = 0;
-            foreach ($musics as &$music) {
-                if ($music['arrangeNo'] === $arrange['arrangeNo']) {
-                    $totalSize += $music['musicSize'];
-                    $music['musicUrl'] = Utils::getHost() . "/music-app/" . $music['musicUrl'];
-                    $arrMusic[] = $music;
-                    continue;
-                }
-            }
-            $arrange['musics'] = $arrMusic;
-            $arrange ['totalSize']  = $totalSize;
-            $arrange ['createTime']  = strtotime($arrange ['createTime'] );
-        }
-
-return Debugger::toJson($arranges,'');
+//
+//    $devices=    MusicArrangeDevice::findAll(['deviceNo'=>'D1003']);
+//
+//        $ans=[];
+//        foreach ($devices as $device) {
+//     $ans[]=$device->arrangeNo;
+//    }
+//    $arranges=    DBHelper::newQuery()
+//            ->from(MusicArrange::tableName())
+//            ->where(['in','arrangeNo',$ans])
+//            ->all();
+//
+//     $musics=   DBHelper::newQuery()
+//            ->from(MusicArrangeItem::tableName())
+//            ->where(['in','arrangeNo',$ans])
+//            ->leftJoin(MusicLibrary::tableName(),'music_arrange_item.musicNo = music_library.musicNo')
+//            ->all();
+//
+//        foreach ($arranges as &$arrange) {
+//            $arrMusic = [];
+//            $totalSize = 0;
+//            foreach ($musics as &$music) {
+//                if ($music['arrangeNo'] === $arrange['arrangeNo']) {
+//                    $totalSize += $music['musicSize'];
+//                    $music['musicUrl'] = Utils::getHost() . "/music-app/" . $music['musicUrl'];
+//                    $arrMusic[] = $music;
+//                    continue;
+//                }
+//            }
+//            $arrange['musics'] = $arrMusic;
+//            $arrange ['totalSize']  = $totalSize;
+//            $arrange ['createTime']  = strtotime($arrange ['createTime'] );
+//        }
+//
+//return Debugger::toJson($arranges,'');
 //        return $this->render('index');
+
+        MusicArrangeDevice::updateAll(['pubStatus'=>0],['id'=>[4,5,6]]);
+//        MusicArrangeDevice::findAll(['id'=>[4,5,6]]);
+//     DBHelper::newQuery()
+//         ->from(MusicArrangeDevice::tableName())
+//         ->where(['id'=>[4,5,6]])
+//         ->all();
+        return $this->render('index');
     }
 
 }
