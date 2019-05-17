@@ -28,7 +28,8 @@
         "newerton/yii2-dynamicform": "*",
         "mongodb/mongodb": "^1.4",
         "workerman/workerman": "^3.5",
-
+        "workerman/phpsocket.io" : ">1.0.0",
+        "ext-curl": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

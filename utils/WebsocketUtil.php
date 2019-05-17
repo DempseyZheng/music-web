@@ -18,13 +18,52 @@ use app\models\SocketMessage;
 
 class WebsocketUtil
 {
+    const PUSH_URL='http://192.168.1.188:20003/';
+    const WEB_PUSH_URL='http://192.168.1.188:2121/';
+    /**
+     * @param string $to_uid  指明给谁推送，为空表示向所有在线用户推送
+     */
+    public static function pushWeb($to_uid,$content)
+    {
+        $post_data = array(
+            'type' => 'publish',
+            'content' => $content,
+            'to' => $to_uid,
+        );
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, self::WEB_PUSH_URL);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+        $return = curl_exec($ch);
+        curl_close($ch);
+//        var_export($return);
+        return $return;
+    }
+
+
 
     public static function sendMsg($devId, $message)
     {
-        $msg = new SocketMessage();
-        $msg->devId = $devId;
-        $msg->message =Debugger::toJson($message,'发送消息'.$devId) ;
-        $msg->doSave();
+        $message=   Debugger::toJson($message,'发送消息'.$devId);
+        $post_data = array(
+            'type' => 'publish',
+            'content' => $message,
+            'to' => $devId,
+        );
+        $post_data=   Debugger::toJson($post_data,'postData');
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, self::PUSH_URL);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS,['data'=>$post_data] );
+        $return = curl_exec($ch);
+        curl_close($ch);
+//        var_export($return);
+        Debugger::debug($return);
+        echo $return;
     }
 
 
@@ -109,18 +148,7 @@ class WebsocketUtil
         $connection->lastMessageTime = time();
 
 //        $replyMsg = $data;
-        $data = Debugger::fromJson($data, $connection->getRemoteIp());
-        if (empty($data)) {
-//            $connection->send($replyMsg);
-            return;
-        }
-        if (empty($data->c)) {
-//            $connection->send($replyMsg);
-            return;
-        }
-        if ($data->c === 'PONG') {
-            return;
-        }
+
         $replyObj = new \stdClass();
         $replyObj->c = $data->c;
         $replyObj->s = $data->s;

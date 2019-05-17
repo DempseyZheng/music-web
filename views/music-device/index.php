@@ -11,6 +11,7 @@ $this->title = Yii::t('app', 'Music Devices');
 $this->params['breadcrumbs'][] = $this->title;
 \app\assets\JquerySliderAsset::register($this);
 \app\assets\JqueryTipAsset::register($this);
+\app\assets\WebMsgAsset::register($this);
 ?>
 
 <script>
@@ -29,6 +30,27 @@ $this->params['breadcrumbs'][] = $this->title;
             }
         });
 
+var url='http://'+document.domain+':2120';
+// console.log(url);
+        // 连接服务端
+        var socket = io(url);
+        // 连接后登录
+        socket.on('connect', function(){
+            console.log('connect');
+            socket.emit('login', '1564156461');
+        });
+        // 后端推送来消息时
+        socket.on('new_msg', function(msg){
+            console.log('new_msg'+msg);
+            // $('#content').html('收到消息：'+msg);
+            // $('.notification.sticky').notify();
+        });
+        // 后端推送来在线数据时
+        socket.on('update_online_count', function(online_stat){
+            // $('#online_box').html(online_stat);
+            console.log('update_online_count'+online_stat);
+        });
+
     });
 
     function onSlideConfirm() {
@@ -38,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
             return
         }
         $.post('set-volume', {ids: keys,volume:$("#slider").slider("value")}, function (data) {
-            console.log(data);
+            xcsoft.info(data,2000);
         })
     }
 
@@ -70,6 +92,12 @@ $this->params['breadcrumbs'][] = $this->title;
         }
         $.post('restart', {ids: keys}, function (data) {
             console.log(data);
+            xcsoft.info(data,2000);
+        })
+    }
+    function devLog() {
+        $.post('dev-log', {}, function (data) {
+            console.log(data);
         })
     }
 </script>
@@ -84,6 +112,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a(Yii::t('app', 'Delete'), "javascript:void(0);", ['class' => 'btn btn-success', 'onclick' => 'multiDelete()']) ?>
         <?= Html::a('设置音量', "javascript:void(0);", ['class' => 'btn btn-success', 'onclick' => 'setVolume()']) ?>
         <?= Html::a('重启设备', "javascript:void(0);", ['class' => 'btn btn-success', 'onclick' => 'restart()']) ?>
+        <?= Html::a('获取日志', "javascript:void(0);", ['class' => 'btn btn-success', 'onclick' => 'devLog()']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>

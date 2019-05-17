@@ -232,4 +232,11 @@ class MusicDeviceController extends BaseController
         Debugger::toJson($arr, 'actionSetVolume');
         WebsocketUtil::handleSetVolume($arr,$volume);
     }
+
+    public function actionDevLog()
+    {
+     return   WebsocketUtil::pushWeb('','这个是推送的测试数据');
+    }
+
+
 }

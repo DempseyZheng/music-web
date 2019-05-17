@@ -120,11 +120,3 @@ CREATE TABLE `music_arrange_item`
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8;
 
-CREATE TABLE `socket_message`
-(
-  `id`           INT(11)     NOT NULL AUTO_INCREMENT,
-  `devId`      VARCHAR(30) NOT NULL,
-  `message`    VARCHAR(256) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE = INNODB
-  DEFAULT CHARSET = utf8;
