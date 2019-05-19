@@ -3,6 +3,13 @@ body {
     height: 100%;
 }
 
+.has-scroll{
+    overflow: auto;
+}
+
+.no-scroll{
+    overflow: hidden;
+}
 .wrap {
     min-height: 100%;
     height: auto;

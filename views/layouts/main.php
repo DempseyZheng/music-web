@@ -1,11 +1,28 @@
 <?php
 
 use yii\helpers\Html;
+use yii\widgets\Breadcrumbs;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
 
 
+?>
+<?php $this->beginPage() ?>
+<!doctype html>
+<html lang="<?= Yii::$app->language ?>" class="has-scroll">
+<head>
+    <meta charset="<?= Yii::$app->charset ?>"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <?= Html::csrfMetaTags() ?>
+    <title><?= Html::encode($this->title) ?></title>
+    <?php $this->head() ?>
+</head>
+<body>
+<?php $this->beginBody() ?>
+
+
+<?php
 
 if (Yii::$app->controller->action->id === 'login') {
     /**
@@ -17,51 +34,32 @@ if (Yii::$app->controller->action->id === 'login') {
         ['content' => $content]
     );
 } else {
+app\assets\AppAsset::register($this);
 
-    if (class_exists('backend\assets\AppAsset')) {
-        backend\assets\AppAsset::register($this);
-    } else {
-        app\assets\AppAsset::register($this);
-    }
 
-    dmstr\web\AdminLteAsset::register($this);
+//    \app\assets\AdminLteAsset::register($this);
+\app\assets\BsTabsAsset::register($this);
 
-    $directoryAsset = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/adminlte/dist');
-    ?>
-    <?php $this->beginPage() ?>
-<!doctype html>
-    <html lang="<?= Yii::$app->language ?>">
-    <head>
-        <meta charset="<?= Yii::$app->charset ?>"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <?= Html::csrfMetaTags() ?>
-        <title><?= Html::encode($this->title) ?></title>
-        <?php $this->head() ?>
-    </head>
-    <body class="hold-transition skin-blue sidebar-mini">
-    <?php $this->beginBody() ?>
-    <div class="wrapper">
+$directoryAsset = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/adminlte/dist');
+?>
 
-        <?= $this->render(
-            'header.php',
-            ['directoryAsset' => $directoryAsset]
-        ) ?>
+<div style="height: 100%">
 
-        <?= $this->render(
-            'left.php',
-            ['directoryAsset' => $directoryAsset]
-        )
-        ?>
+    <?=
+    Breadcrumbs::widget(
+        [
+        'homeLink'=> false,
+            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+        ]
+    ) ?>
+    <?= $content ?>
+</div>
 
-        <?= $this->render(
-            'content.php',
-            ['content' => $content, 'directoryAsset' => $directoryAsset]
-        ) ?>
 
-    </div>
+<?php $this->endBody() ?>
+</body>
+</html>
+<?php $this->endPage() ?>
 
-    <?php $this->endBody() ?>
-    </body>
-    </html>
-    <?php $this->endPage() ?>
+
 <?php } ?>

@@ -25,7 +25,7 @@
 <!--        </form>-->
         <!-- /.search form -->
 
-        <?= dmstr\widgets\Menu::widget(
+       <?=dmstr\widgets\Menu::widget(
             [
                 'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
                 'items' => [
@@ -36,17 +36,10 @@
                     ['label' => '设备信息', 'icon' => 'circle-o', 'url' => ['/music-device/index']],
                     ['label' => '音乐播控', 'icon' => 'circle-o', 'url' => ['/music-arrange-device/index']],
 
-//                    [
-//                        'label' => 'Some tools',
-//                        'icon' => 'share',
-//                        'url' => '#',
-//                        'items' => [
-//                            ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii'],],
-//                        ],
-//                    ],
                 ],
             ]
         ) ?>
+
 
     </section>
 

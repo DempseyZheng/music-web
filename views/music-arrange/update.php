@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $model app\models\MusicArrange */
 
 $this->title = '更新播期: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Music Arranges', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => '播期列表', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = '更新';
 ?>
